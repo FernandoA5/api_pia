@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+
+  database:
+    build:
+      context: .
+      dockerfile: dockerfile-pg
+    restart: always
+    container_name: pg
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: erp
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    expose:
+      - 5432
+    networks:
+      - mynet
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_USER: "postgres"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - 80:80
+    depends_on:
+      - database
+    networks:
+      - mynet
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile-api
+    container_name: api
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - mynet
+    depends_on:
+      - database
+
+networks:
+  mynet:
+    driver: bridge
