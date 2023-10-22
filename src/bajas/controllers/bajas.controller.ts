@@ -1,4 +1,9 @@
 import { Controller } from '@nestjs/common';
 
 @Controller('bajas')
-export class BajasController {}
+export class BajasController {
+    @Get()
+    async getAll(){
+        return await this.bajasService.getAll();
+    }
+}
