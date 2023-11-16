@@ -5,7 +5,7 @@ export class Ingresos {
   @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'numeric', nullable: false })
   ventas: number;
 
   @Column({ type: 'text', nullable: false })
